@@ -1,3 +1,4 @@
+import { baseURL } from '@/routes/apiRoutes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 import type { ITeamState } from '../../types/team';
@@ -13,7 +14,7 @@ type TeamData = {
 
 export const teamApiService = createApi({
   reducerPath: 'teamApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://mujibu-server-fau1.onrender.com/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: baseURL }),
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
       return action.payload[reducerPath];
@@ -21,7 +22,7 @@ export const teamApiService = createApi({
   },
   endpoints: (builder) => ({
     getTeam: builder.query<ITeamState, string>({
-      query: (id) => `/team/${id}`,
+      query: (id) => `/api/team/${id}`,
     }),
   }),
 });

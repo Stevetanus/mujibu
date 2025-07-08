@@ -282,7 +282,6 @@ const Form = () => {
 
   const handleStep1 = () => {
     const checkData = getValues();
-    console.log(checkData);
     if (
       firstStep &&
       checkData.projectName !== '' &&
@@ -350,11 +349,8 @@ const Form = () => {
 
   const onSubmit: SubmitHandler<IProjectState> = useCallback(
     async (data) => {
-      console.log(activeStep);
       if (isPreview && !proposalSuccess) {
         data.projectProposer = userData._id;
-
-        console.log('final !! proposal form data : ', data);
 
         try {
           const res = await postProposal({ body: data }).unwrap();
@@ -362,7 +358,6 @@ const Form = () => {
             ...res,
             status: res.status,
           };
-          console.log('postData', postData);
           if (postData?.status == 'Success') {
             setProposalSuccess(true);
             setIsPreview(false);

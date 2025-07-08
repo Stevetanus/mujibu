@@ -49,7 +49,6 @@ const ProjectPlan: React.FC<IProjectPlanProps> = ({
 
   useEffect(() => {
     if (planEndTime) {
-      console.log('running in ProjectPlan', planEndTime);
       const timer = setInterval(() => {
         setRemainingTime(getRemainingTime(new Date(planEndTime)));
         // setRemainingTime(getRemainingTime(planEndTime as Date));

@@ -224,7 +224,6 @@ const ProjectsLayout: React.FC<IProjectLayoutProps> = ({
                       <div className="btn1 w-1/2 flex">
                         <Button
                           onClick={() => {
-                            console.log(handleFollow);
                             handleFollow && handleFollow();
                           }}
                           variant="outlined"

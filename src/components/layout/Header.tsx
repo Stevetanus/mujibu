@@ -37,7 +37,6 @@ const Header = () => {
         Cookies.remove('googleToken');
         dispatch(clearToken());
         router.push(routePath.home);
-        console.log('Signed out successfully');
       })
       .catch((error) => {
         console.log('error', error);
@@ -53,8 +52,6 @@ const Header = () => {
 
       dispatch(setUserToken(res.tokens));
       dispatch(updateUser(userData));
-
-      // console.log(res);
     } catch (err) {
       handleLogout();
       console.log(err);

@@ -1,3 +1,5 @@
+// 最早期測試用
+import { baseURL } from '@/routes/apiRoutes';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { HYDRATE } from 'next-redux-wrapper';
 import type { IProjectState } from '../../types/project';
@@ -13,7 +15,7 @@ type PostData = {
 
 export const postApiService = createApi({
   reducerPath: 'postsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'https://mujibu-server-fau1.onrender.com/api' }),
+  baseQuery: fetchBaseQuery({ baseUrl: `${baseURL}/api` }),
   extractRehydrationInfo(action, { reducerPath }) {
     if (action.type === HYDRATE) {
       return action.payload[reducerPath];

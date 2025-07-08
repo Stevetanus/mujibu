@@ -20,6 +20,7 @@ import { projectApiService } from './services/projectApi';
 import { uploadPhotoApiService } from './services/uploadPhotoApi';
 import { postApiService } from './services/postApi';
 import { homeApiService } from './services/homeApi';
+import { paymentApiService } from './services/paymentApi';
 
 const reducers = combineReducers({
   projectReducer,
@@ -33,6 +34,7 @@ const reducers = combineReducers({
   [teamApiService.reducerPath]: teamApiService.reducer,
   [uploadPhotoApiService.reducerPath]: uploadPhotoApiService.reducer,
   [postApiService.reducerPath]: postApiService.reducer,
+  [paymentApiService.reducerPath]: paymentApiService.reducer,
   [projectApiService.reducerPath]: projectApiService.reducer,
   [homeApiService.reducerPath]: homeApiService.reducer,
 });
@@ -48,6 +50,7 @@ export const makeStore = wrapMakeStore(() =>
         .concat(teamApiService.middleware)
         .concat(uploadPhotoApiService.middleware)
         .concat(postApiService.middleware)
+        .concat(paymentApiService.middleware)
         .concat(projectApiService.middleware)
         .concat(homeApiService.middleware);
     },

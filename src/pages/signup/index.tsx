@@ -81,10 +81,7 @@ const SignUp = () => {
     setValue('birthDate', value);
   };
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log('form data : ', data);
-    console.log('birthDate : ', data.birthDate);
-  };
+  const onSubmit: SubmitHandler<FormData> = (data) => {};
 
   useEffect(() => {
     if (googleToken) {
