@@ -21,12 +21,10 @@ interface DetailsProps {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const { id } = context.query;
-  console.log('id', id);
   if (typeof id === 'string') {
     store.dispatch(getProjectById.initiate(id));
   }
   const [res] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
-  console.log(res);
   return {
     props: {
       project: (res.data as { status: string; data: IProjectState }).data,
@@ -145,7 +143,6 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
   }, [project.projectPlans, projectPlanId]);
 
   const handleProjectPlanClick = (projectId: string, projectPlanId: string) => {
-    console.log(`click on plan ${projectPlanId}`);
     router.push(`/projects/select/${projectId}?projectPlanId=${projectPlanId}`);
   };
 
@@ -345,7 +342,7 @@ const ProjectSelectPage = ({ project }: DetailsProps) => {
                   fullWidth
                   size="large"
                   className="mt-3"
-                  onClick={() => console.log('結帳！')}
+                  onClick={() => alert('結帳頁面尚未製作完成，請使用下面「立刻付清」按鈕')}
                 >
                   前往結帳
                 </Button>

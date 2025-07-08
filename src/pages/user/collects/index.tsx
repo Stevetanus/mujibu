@@ -42,10 +42,7 @@ const Collects = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log('useEffect :', userId);
-
     if (userId) {
-      console.log('useEffect2 :', userId);
       refetch();
     }
   }, [userId, refetch]);

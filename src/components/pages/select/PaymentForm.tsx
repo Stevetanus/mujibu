@@ -1,5 +1,7 @@
 import { useAppSelector } from '@/libraries/hooks/reduxHooks';
+import { useCreatePaymentIntentMutation } from '@/store/services/paymentApi';
 import { selectUser } from '@/store/slices/userSlice';
+import { APIError } from '@/types/api';
 import { Button } from '@mui/material';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { StripeCardElement } from '@stripe/stripe-js';
@@ -15,56 +17,47 @@ const PaymentForm: React.FC<IPaymentProps> = ({ prize, isDisabled }) => {
   const elements = useElements();
   const user = useAppSelector(selectUser);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [createPaymentIntent, { isLoading, error, data }] = useCreatePaymentIntentMutation();
 
   const paymentHandler = async (e: any) => {
-    console.log('handle!');
     e.preventDefault();
 
     if (!stripe || !elements) return;
 
     setIsProcessing(true);
 
-    const responseH = await fetch('/api/hello').then((res) => res.json());
-    console.log(responseH);
-
-    const response = await fetch('/.netlify/functions/create-payment-intent', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ amount: prize, email: '000testonly@gmail.com' }), // multiply 100 to be cents
-    })
-      .then((res) => res.json())
-      .catch(() => {
-        setIsProcessing(false);
-        alert('API error, 現在只能在 netlify 上使用');
-      });
-
-    const {
-      paymentIntent: { client_secret },
-    } = response;
-
     const cardDetails = elements.getElement(CardElement);
 
-    //   if (!ifValidCardElement(cardDetails)) return;
+    try {
+      const response = await createPaymentIntent({
+        amount: prize,
+        email: user.email || '000testonly@gmail.com',
+      }).unwrap(); // unwrap 會直接給你 data 或 throw error
 
-    const paymentResult = await stripe.confirmCardPayment(client_secret, {
-      payment_method: {
-        card: cardDetails as StripeCardElement,
-        billing_details: {
-          name: user.name || '六角小姐',
+      const clientSecret = response.clientSecret;
+      // 👉 在這裡做 confirmCardPayment 的 stripe 調用
+
+      const paymentResult = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardDetails as StripeCardElement,
+          billing_details: {
+            name: user.name || '奇異熊怪',
+          },
         },
-      },
-    });
+      });
 
-    setIsProcessing(false);
-
-    if (paymentResult.error) {
-      alert(paymentResult.error.message);
-    } else {
-      if (paymentResult.paymentIntent.status === 'succeeded') {
-        alert('Payment Successful');
+      if (paymentResult.error) {
+        alert(paymentResult.error.message);
+      } else if (paymentResult.paymentIntent?.status === 'succeeded') {
+        alert('💰 Payment Successful!');
+      } else {
+        alert('⚠️ Payment status: ' + paymentResult.paymentIntent?.status);
       }
+    } catch (err) {
+      const error = err as APIError;
+      alert(error?.data?.error ?? 'API error, 請確認後端是否正確啟動');
+    } finally {
+      setIsProcessing(false);
     }
   };
 

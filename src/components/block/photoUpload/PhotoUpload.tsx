@@ -41,7 +41,6 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
       const formData = new FormData();
       formData.append('file', file);
       const res = await uploadPhoto(formData).unwrap();
-      console.log(res.fileUrl);
       if (isPlan) {
         setImageUploadedList &&
           setImageUploadedList((prev) => {
@@ -67,6 +66,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
             alt={originalName ?? 'unknown name'}
             width={400}
             height={200}
+            priority
             src={
               imageFile
                 ? URL.createObjectURL(imageFile)
@@ -126,6 +126,7 @@ const PhotoUpload: React.FC<PhotoUploadProps> = ({
             alt={originalName ?? 'unknown name'}
             width={400}
             height={300}
+            priority
             src={
               imageFile
                 ? URL.createObjectURL(imageFile)

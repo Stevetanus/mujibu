@@ -169,15 +169,25 @@ const Team = ({ teamData }: { teamData: ITeamState }) => {
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
   const { id } = context.query;
-  console.log('id', id);
   if (typeof id === 'string') {
     store.dispatch(getTeam.initiate(id));
   }
-  const [res] = await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+  await Promise.all(store.dispatch(getRunningQueriesThunk()));
+
+  // ❗️從 RTK Query 的 cache 中撈資料
+  const state = store.getState();
+  const teamQueryState = getTeam.select(id as string)(state);
+
+  if (!teamQueryState?.data) {
+    return {
+      notFound: true, // 或其他錯誤處理
+    };
+  }
 
   return {
     props: {
-      teamData: (res.data as { status: string; data: ITeamState }).data,
+      teamData: (teamQueryState.data as { status: string; data: ITeamState }).data,
     },
   };
 });

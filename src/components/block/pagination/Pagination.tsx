@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import Stack from '@mui/material/Stack';
@@ -15,25 +15,16 @@ interface IPaginationProps {
 const CustomPagination = (props: IPaginationProps) => {
   const { onClick, count = 1, page = 1 } = props;
 
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>, page: number) => {
-    event.preventDefault();
-    onClick && onClick(page);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    onClick && onClick(value);
   };
-
   return (
     <Stack spacing={2}>
       <Pagination
         count={count}
         page={page}
-        renderItem={(item) => (
-          <PaginationItem
-            component={(props) => {
-              return <IconButton {...props} onClick={(e) => handleClick(e, item.page as number)} value={props.value} />;
-            }}
-            slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }}
-            {...item}
-          />
-        )}
+        onChange={handleChange}
+        renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />}
       />
     </Stack>
   );

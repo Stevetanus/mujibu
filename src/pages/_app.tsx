@@ -44,6 +44,15 @@ const App = ({ Component, ...rest }: AppProps) => {
   //   });
   // }
 
+  /*
+  <Elements> 是：
+
+  用來 提供 context 給 CardElement、PaymentElement 等元件
+
+  幫助前端與 Stripe 的付款流程整合
+
+  */
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

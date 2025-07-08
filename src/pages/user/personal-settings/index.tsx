@@ -85,14 +85,12 @@ const PersonalSettings = () => {
   };
 
   const onSubmit: SubmitHandler<IUserState> = async (data) => {
-    console.log('user form data : ', data);
     try {
       const res = await patchUser({ _id: userData._id, body: data }).unwrap();
       const updateData = {
         ...res,
       };
       dispatch(updateUser(updateData));
-      console.log(updateData);
     } catch (err) {
       console.log(err);
     }
